@@ -1,0 +1,123 @@
+#BubbleSort-didn't work
+class Solution(object):
+    def sortList(self, head):
+        """
+        :type head: Optional[ListNode]
+        :rtype: Optional[ListNode]
+        """
+        if not head or not head.next:
+                return head  
+
+        swapped = True
+        while swapped:
+                swapped = False
+                current = head
+                while current and current.next:
+                    if current.val > current.next.val:
+                        current.val, current.next.val = current.next.val, current.val
+                        swapped = True
+                    current = current.next
+
+        return head
+
+
+#Modified Selection Sort-didn't work
+class Solution(object):
+    def sortList(self, head):
+        if not head or not head.next:
+            return head
+
+        length = 0
+        node = head
+        while node:
+            length += 1
+            node = node.next
+
+        start_pos = 0
+        end_pos = length - 1
+
+        while start_pos < end_pos:
+            current = head
+            min_node = None
+            max_node = None
+            first = None
+            last = None
+            i = 0
+
+            # find min, max, first, and last nodes
+            while current:
+                if i == start_pos:
+                    first = current
+                    min_node = current
+                    max_node = current
+                elif start_pos < i <= end_pos:
+                    if current.val < min_node.val:
+                        min_node = current
+                    if current.val > max_node.val:
+                        max_node = current
+                    if i == end_pos:
+                        last = current
+                current = current.next
+                i += 1
+            if min_node and first:
+                first.val, min_node.val = min_node.val, first.val
+            if max_node == first:
+                max_node = min_node
+
+            if max_node and last:
+                last.val, max_node.val = max_node.val, last.val
+
+            start_pos += 1
+            end_pos -= 1
+
+        return head
+#Merge sort-binary that's why worked
+class Solution(object):
+    def sortList(self, head):
+        """
+        Sorts a linked list using merge sort.
+        :type head: Optional[ListNode]
+        :rtype: Optional[ListNode]
+        """
+        if not head or not head.next:
+            return head
+
+        mid = self.get_middle(head)
+        right_head = mid.next
+        mid.next = None  # split the list
+        left = self.sortList(head)
+        right = self.sortList(right_head)
+
+        return self.merge(left, right)
+
+    def get_middle(self, head):
+        slow = head
+        fast = head
+        prev = None
+
+        while fast and fast.next:
+            prev = slow
+            slow = slow.next
+            fast = fast.next.next
+
+        return prev if fast is None else slow
+
+    def merge(self, l1, l2):
+        dummy = ListNode()
+        current = dummy
+
+        while l1 and l2:
+            if l1.val < l2.val:
+                current.next = l1
+                l1 = l1.next
+            else:
+                current.next = l2
+                l2 = l2.next
+            current = current.next
+
+        if l1:
+            current.next = l1
+        if l2:
+            current.next = l2
+
+        return dummy.next
