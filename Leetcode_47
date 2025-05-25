@@ -1,0 +1,15 @@
+class Solution(object):
+    def permuteUnique(self, nums):
+        all_permutations = set()
+
+        def permute(current, remaining):
+            if not remaining:
+                all_permutations.add(tuple(current)) 
+                return
+            for i in range(len(remaining)):
+                next_current = current + [remaining[i]]
+                next_remaining = remaining[:i] + remaining[i+1:]
+                permute(next_current, next_remaining)
+
+        permute([], nums)
+        return [list(p) for p in all_permutations]
