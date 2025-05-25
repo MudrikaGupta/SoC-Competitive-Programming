@@ -1,1 +1,36 @@
+from collections import Counter
 
+class Solution:
+    def threeSum(self, nums):
+        if len(nums) < 3:
+            return []
+
+        counts = Counter(nums)
+        filtered_nums = []
+        for num in sorted(counts.keys()):
+            if num == 0:
+                filtered_nums.extend([0] * min(counts[0], 3))
+            else:
+                filtered_nums.extend([num] * min(counts[num], 2))
+
+        triplets = set()
+        nums = filtered_nums
+        nums.sort()
+
+        for i in range(len(nums)):
+            target = nums[i]
+            if target < 0:
+                continue
+            popped = nums.pop(i)
+            complement = -popped
+            seen = set()
+
+            for val in nums:
+                if complement - val in seen:
+                    triplet = tuple(sorted([popped, val, complement - val]))
+                    triplets.add(triplet)
+                seen.add(val)
+
+            nums.insert(i, popped)
+
+        return [list(t) for t in triplets]
