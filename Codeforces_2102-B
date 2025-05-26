@@ -1,0 +1,16 @@
+t = int(input())
+for k in range(t):
+    n = int(input())
+    arr = list(map(int, input().split()))
+    first_abs = abs(arr[0])
+
+    count = 0
+    for i in range(n):
+        if abs(arr[i]) < first_abs:
+            count += 1
+    middle = n // 2
+
+    if count <= middle:
+        print("Yes")
+    else:
+        print("No")
