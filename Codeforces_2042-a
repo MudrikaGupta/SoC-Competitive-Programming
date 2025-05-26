@@ -1,0 +1,20 @@
+t = int(input())
+for m in range(t):
+  n, k = map(int, input().split())
+  arr = list(map(int, input().split()))
+  
+  total = sum(arr)
+  
+  if total < k:
+      print(k - total)
+  
+  else:
+      arr.sort(reverse=True)
+      current_sum = 0
+  
+      for value in arr:
+          if current_sum + value > k:
+              break
+          current_sum += value
+  
+      print(k-current_sum)
