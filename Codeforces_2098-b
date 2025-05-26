@@ -1,0 +1,44 @@
+import math
+
+def add_median_to_set(arr, mean_set):
+    sorted_arr = sorted(arr)
+    n = len(sorted_arr)
+    
+    if n == 0:
+        return
+    
+    if n % 2 == 1:
+        median = sorted_arr[n // 2]
+    else:
+        median = (sorted_arr[n // 2 - 1] + sorted_arr[n // 2]) / 2
+
+    fractional = median - int(median)
+    
+    if fractional == 0.5:
+        mean_set.add(math.floor(median))
+        mean_set.add(math.ceil(median))
+    elif fractional < 0.5:
+        mean_set.add(math.floor(median))
+    else:
+        mean_set.add(math.ceil(median))
+
+def process_array(arr, n, k, mean_set):
+    if n == 0 or k < 0:
+        return
+
+    add_median_to_set(arr, mean_set)
+
+    for i in range(n):
+        new_arr = arr[:i] + arr[i+1:]
+        process_array(new_arr, n - 1, k - 1, mean_set)
+
+t = int(input())
+for m in range(t):
+    n, k = map(int, input().split())
+    arr = list(map(int, input().split()))
+    mean_set = set()
+    
+    process_array(arr, n, k, mean_set)
+    print(len(mean_set))
+
+  
