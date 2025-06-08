@@ -1,0 +1,84 @@
+#Hardcoding
+class Solution(object):
+    def simplifyPath(self, path):
+        """
+        :type path: str
+        :rtype: str
+        """
+        i = 0
+        n = len(path)
+        result = []
+
+        # path starts with slash
+        if n == 0 or path[0] != '/':
+            path = '/' + path
+            n += 1
+
+        while i < n:
+            prev = path[i - 1] if i > 0 else None
+            curr = path[i]
+            nxt = path[i + 1] if i + 1 < n else None
+
+            # merge /
+            if prev == '/' and curr == '/' :
+                i += 1
+                continue
+
+            #skip single.
+            if prev == '/' and curr == '.' and nxt == '/':
+                i += 2  # skip both '.' and next '/'
+                continue
+
+            # delete directory for ..
+            if curr == '.' and (nxt is None or nxt == '/') and prev == '.':
+               
+                if result:
+                    result.pop()  
+                if result:
+                    result.pop() 
+                
+                while result and result[-1] != '/':
+                    result.pop()
+                if result and result[-1] == '/':
+                    result.pop()
+                i += 1 if nxt is None else 2
+                continue
+
+            #skip last /
+            if nxt is None and curr == '/':
+                i += 1
+                continue
+
+            result.append(curr)
+            i += 1
+
+        final_path = ''.join(result)
+        if final_path == '':
+            return '/'
+        return final_path
+
+
+
+
+
+
+Using Stacks:-
+class Solution(object):
+    def simplifyPath(self, path):
+        """
+        :type path: str
+        :rtype: str
+        """
+        stack = []
+        parts = path.split('/')
+
+        for part in parts:
+            if part == '' or part == '.':
+                continue
+            elif part == '..':
+                if stack:(if exists)
+                    stack.pop()
+            else:
+                stack.append(part)
+
+        return '/' + '/'.join(stack)
