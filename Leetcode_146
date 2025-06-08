@@ -1,0 +1,22 @@
+from collections import OrderedDict
+
+class LRUCache(object):
+
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.cache = OrderedDict()
+
+    def get(self, key):
+        if key in self.cache:
+            value = self.cache.pop(key)  # simulate move-to-end
+            self.cache[key] = value
+            return value 
+        else:
+            return -1
+
+    def put(self, key, value):
+        if key in self.cache:
+            self.cache.pop(key)
+        self.cache[key] = value
+        if len(self.cache) > self.capacity:
+            self.cache.popitem(last=False)
