@@ -1,0 +1,94 @@
+#solution-1
+class ListNode(object):
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class Solution(object):
+    def reorderList(self, head):
+        """
+        :type head: Optional[ListNode]
+        :rtype: Optional[ListNode]
+        """
+        if not head or not head.next:
+            return head
+        length = 0
+        curr = head
+        while curr:
+            length += 1
+            curr = curr.next
+
+        mid = (length + 1) // 2
+        first = head
+        curr = head
+        prev = None
+        for _ in range(mid):
+            prev = curr
+            curr = curr.next
+
+        prev.next = None
+
+        second = None
+        while curr:
+            temp = curr.next
+            curr.next = second
+            second = curr
+            curr = temp
+
+        dummy = ListNode(0)
+        tail = dummy
+        p1 = first
+        p2 = second
+
+        while p1 or p2:
+            if p1:
+                tail.next = p1
+                p1 = p1.next
+                tail = tail.next
+            if p2:
+                tail.next = p2
+                p2 = p2.next
+                tail = tail.next
+
+        return dummy.next
+
+
+
+
+#Solution-2
+
+class Solution(object):
+    def reorderList(self, head):
+        """
+        :type head: Optional[ListNode]
+        :rtype: Optional[ListNode]
+        """
+        if not head or not head.next:
+            return head
+
+        length = 0
+        curr = head
+        while curr:
+            length += 1
+            curr = curr.next
+
+        mid = (length + 1) // 2
+        curr = head
+        for _ in range(mid - 1):
+            curr = curr.next
+
+        stack = []
+        second = curr.next
+        curr.next = None  # break the first and second half
+        while second:
+            stack.append(second)
+            second = second.next
+        curr = head
+        while stack:
+            temp = curr.next
+            node = stack.pop()
+            curr.next = node
+            node.next = temp
+            curr = temp
+
+        return head
