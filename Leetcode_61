@@ -1,0 +1,27 @@
+ if not head or not head.next or k == 0:
+            return head
+        length = 1
+        tail = head
+        while tail.next:
+            tail = tail.next
+            length += 1
+
+        k %= length
+        if k == 0:
+            return head
+
+        first = head
+        second = head
+        for _ in range(k):
+            if second:
+                second = second.next
+
+        while second.next:
+            first = first.next
+            second = second.next
+
+        new_head = first.next     # This becomes new head
+        first.next = None         # Current becomes new tail
+        second.next = head        # Old tail connects to old head
+
+        return new_head
