@@ -1,0 +1,21 @@
+class Solution(object):
+    def flatten(self, head):
+        def flatten_dfs(prev, curr):
+            if not curr:
+                return prev
+            curr.prev = prev
+            if prev:
+                prev.next = curr
+
+            temp_next = curr.next  
+
+            tail = flatten_dfs(curr, curr.child) 
+            curr.child = None 
+
+            return flatten_dfs(tail, temp_next) 
+
+        if not head:
+            return head
+
+        flatten_dfs(None, head)
+        return head
