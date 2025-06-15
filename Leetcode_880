@@ -1,0 +1,42 @@
+#exceeded memory
+class Solution(object):
+    def decodeAtIndex(self, s, k):
+        """
+        :type s: str
+        :type k: int
+        :rtype: str
+        """
+        str=[]
+        if k==1:
+            return s[0]
+        while len(str)<k:
+            for i in range(len(s)):
+                if s[i].isdigit()and 1 <= int(s[i]) <= 9:
+                    str=str*(int(s[i]))
+                else:
+                    str.append(s[i])
+
+
+        return str[k-1]
+
+
+
+
+
+class Solution(object):
+    def decodeAtIndex(self, s, k):
+        size = 0
+        for i in s:
+            if i.isdigit():
+                size *= int(i)
+            else:
+                size += 1
+
+        for j in reversed(s):
+            k %= size
+            if k == 0 and j.isalpha():
+                return j
+            if j.isdigit():
+                size //= int(j)
+            else:
+                size -= 1
