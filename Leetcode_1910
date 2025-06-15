@@ -1,0 +1,18 @@
+class Solution(object):
+    def removeOccurrences(self, s, part):
+        """
+        :type s: str
+        :type part: str
+        :rtype: str
+        """
+        stack = []
+
+        for ch in s:
+            stack.append(ch)
+
+            if len(stack) >= len(part) and stack[-1] == part[-1]:
+                if stack[-len(part):] == list(part):
+                    for _ in range(len(part)):
+                        stack.pop()
+
+        return ''.join(stack)
