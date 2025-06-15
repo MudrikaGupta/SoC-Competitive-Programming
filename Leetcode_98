@@ -1,0 +1,19 @@
+class Solution(object):
+    def isValidBST(self, root):
+        if not root:
+            return True
+        if (root.left and root.left.val >= root.val) or (root.right and root.val >= root.right.val):
+            return False
+
+        left_max = root.left
+        while left_max and left_max.right:
+            left_max = left_max.right
+        if left_max and left_max.val >= root.val:
+            return False
+        right_min = root.right
+        while right_min and right_min.left:
+            right_min = right_min.left
+        if right_min and right_min.val <= root.val:
+            return False
+
+        return self.isValidBST(root.left) and self.isValidBST(root.right)
