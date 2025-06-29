@@ -1,0 +1,31 @@
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        n = len(s)
+        if n == 0:
+            return ""
+
+        # dp[i][j] will be True if the string s[i:j+1] is a palindrome
+        dp = [[False] * n for _ in range(n)]
+
+        start = 0  # starting index of the longest palindrome
+        max_len = 1  # length of the longest palindrome
+
+        # Base case: every single character is a palindrome
+        for i in range(n):
+            dp[i][i] = True
+
+        # Fill the dp table
+        for end in range(1, n):
+            for begin in range(end):
+                if s[begin] == s[end]:
+                    if end - begin == 1 or dp[begin + 1][end - 1]:
+                        dp[begin][end] = True
+                        if end - begin + 1 > max_len:
+                            max_len = end - begin + 1
+                            start = begin
+
+        return s[start:start + max_len]
