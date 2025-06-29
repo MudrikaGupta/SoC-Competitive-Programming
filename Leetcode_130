@@ -1,0 +1,97 @@
+#####################CORRECT CODE#######################
+class Solution(object):
+    def solve(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: None. Modify board in-place.
+        """
+        if not board or not board[0]:
+            return
+        
+        rows, cols = len(board), len(board[0])
+        mark = [[0 for _ in range(cols)] for _ in range(rows)]
+
+        def mark_connected_o(i, j):
+            stack = [(i, j)]
+            while stack:
+                x, y = stack.pop()
+                if x < 0 or x >= rows or y < 0 or y >= cols:
+                    continue
+                if board[x][y] != 'O' or mark[x][y] == 1:
+                    continue
+                mark[x][y] = 1
+                stack.extend([(x+1, y), (x-1, y), (x, y+1), (x, y-1)])
+
+        # Check only edges
+        for i in range(rows):
+            if board[i][0] == 'O':
+                mark_connected_o(i, 0)
+            if board[i][cols - 1] == 'O':
+                mark_connected_o(i, cols - 1)
+        for j in range(cols):
+            if board[0][j] == 'O':
+                mark_connected_o(0, j)
+            if board[rows - 1][j] == 'O':
+                mark_connected_o(rows - 1, j)
+
+        # Rewrite the board based on marks
+        for i in range(rows):
+            for j in range(cols):
+                board[i][j] = 'O' if mark[i][j] == 1 else 'X'
+
+
+
+
+
+
+
+
+
+########Almost working code:##########
+
+
+
+class Solution(object):
+    def solve(self, board):
+        if not board or not board[0]:
+            return
+
+        rows, cols = len(board), len(board[0])
+        value_matrix = [[None for _ in range(cols)] for _ in range(rows)]
+
+        def compute_value(i, j, visiting):
+            if i < 0 or i >= rows or j < 0 or j >= cols:
+                return 0
+
+            if board[i][j] == 'X':
+                return 0
+
+            if (i, j) in visiting:
+                return 0  # Prevent cycles
+
+            if value_matrix[i][j] is not None:
+                return value_matrix[i][j]
+
+            if i == 0 or j == 0 or i == rows - 1 or j == cols - 1:
+                value_matrix[i][j] = 1
+                return 1
+
+            visiting.add((i, j))
+            adjacent_max = max(
+                compute_value(i + 1, j, visiting),
+                compute_value(i - 1, j, visiting),
+                compute_value(i, j + 1, visiting),
+                compute_value(i, j - 1, visiting)
+            )
+            visiting.remove((i, j))
+
+            value_matrix[i][j] = adjacent_max
+            return adjacent_max
+
+        for i in range(rows):
+            for j in range(cols):
+                compute_value(i, j, set())
+
+        for i in range(rows):
+            for j in range(cols):
+                board[i][j] = 'O' if value_matrix[i][j] == 1 else 'X'
