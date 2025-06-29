@@ -1,0 +1,16 @@
+class Solution(object):
+    def jump(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        dp = [float('inf')] * n  # dp[i] = min jumps needed from index i to end
+        dp[-1] = 0  
+
+        for i in range(n - 2, -1, -1):
+            max_jump = nums[i]  
+            for j in range(i + 1, min(i + max_jump + 1, n)):
+                dp[i] = min(dp[i], 1 + dp[j])
+
+        return dp[0]  
